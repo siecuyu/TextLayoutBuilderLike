@@ -1,0 +1,103 @@
+// Definitions of release tasks.
+// In order to upload jars to maven repository run:
+// $ ./gradlew [-P askForPasswords=true] uploadArchives
+// "-P askForPasswords" is optional. Including it in the command will force
+// gradle to ask you for passwords rather than read them from gradle.properties.
+//
+// In order to upload jars to local maven repository run:
+//$ ./gradlew -P repositoryUrl=file://localhost/ uploadArchives
+
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: /*project.repositories.mavenLocal().url*/"http://172.17.103.59:8081/nexus/content/repositories/releases/") {
+            authentication(userName: "admin", password: "admin123")
+            pom.groupId = "com.nearme.instant"
+            pom.artifactId = "textlayoutbuilder"
+            pom.version = "1.1.0.2"
+        }
+    }
+}
+
+//def isReleaseBuild() {
+//    return VERSION_NAME.contains("SNAPSHOT") == false
+//}
+//
+//def getRepositoryUrl() {
+//    return hasProperty('repositoryUrl') ? property('repositoryUrl') : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+//}
+//
+//def getRepositoryUsername() {
+//    return hasProperty('repositoryUsername') ? property('repositoryUsername') : ""
+//}
+//
+//def getRepositoryPassword() {
+//    return hasProperty('repositoryPassword') ? property('repositoryPassword') : ""
+//}
+//
+//def getPassword(String passwordName) {
+//    return new String(System.console().readPassword("\nProvide $passwordName:"))
+//}
+//
+//if (hasProperty('askForPasswords')) {
+//    ext.'repositoryPassword' = getPassword('repository password');
+//    ext.'signing.password' = getPassword('signing password');
+//}
+//
+//afterEvaluate { project ->
+//    version = VERSION_NAME
+//    group = GROUP
+//
+//    signing {
+//        required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+//        sign configurations.archives
+//    }
+//
+//    uploadArchives {
+//        configuration = configurations.archives
+//        repositories.mavenDeployer {
+//            beforeDeployment {
+//                MavenDeployment deployment -> signing.signPom(deployment)
+//            }
+//
+//            repository(url: getRepositoryUrl()) {
+//                authentication(
+//                        userName: getRepositoryUsername(),
+//                        password: getRepositoryPassword())
+//
+//            }
+//
+//            pom.project {
+//                name POM_NAME
+//                artifactId POM_ARTIFACT_ID
+//                packaging POM_PACKAGING
+//                description POM_DESCRIPTION
+//                url 'https://github.com/facebookincubator/TextLayoutBuilder'
+//
+//                scm {
+//                    url 'https://github.com/facebookincubator/TextLayoutBuilder.git'
+//                    connection 'scm:git:https://github.com/facebookincubator/TextLayoutBuilder.git'
+//                    developerConnection 'scm:git:git@github.com:facebookincubator/TextLayoutBuilder.git'
+//                }
+//
+//                licenses {
+//                    license {
+//                        name 'BSD License'
+//                        url 'https://github.com/facebookincubator/TextLayoutBuilder/blob/master/LICENSE'
+//                        distribution 'repo'
+//                    }
+//                }
+//
+//                developers {
+//                    developer {
+//                        id 'facebook'
+//                        name 'Facebook'
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
