@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 dependencies {
 //    compile project(':library:libs:proxy')
-    compile 'com.nearme.instant.jar:staticlayout-proxy:1.1.0.7'
+    compile 'com.nearme.instant:staticlayout-proxy:1.1.0.7'
     provided "com.android.support:support-compat:${rootProject.ext.supportLibVersion}"
     testCompile "junit:junit:${rootProject.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${rootProject.ext.mockitoCoreVersion}"

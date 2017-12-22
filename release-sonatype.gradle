@@ -17,7 +17,7 @@ uploadArchives {
             authentication(userName: "admin", password: "admin123")
             pom.groupId = POM_GROUPID
             pom.artifactId = POM_ARTIFACT_ID
-            pom.version = "1.1.0.7"
+            pom.version = "1.1.0.8"
         }
     }
 }
