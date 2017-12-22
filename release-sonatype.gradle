@@ -15,9 +15,10 @@ uploadArchives {
     repositories.mavenDeployer {
         repository(url: /*project.repositories.mavenLocal().url*/"http://172.17.103.59:8081/nexus/content/repositories/releases/") {
             authentication(userName: "admin", password: "admin123")
-            pom.groupId = "com.nearme.instant"
-            pom.artifactId = "textlayoutbuilder"
-            pom.version = "1.1.0.2"
+            pom.groupId = POM_GROUPID
+            pom.artifactId = POM_ARTIFACT_ID
+            pom.packaging POM_PACKAGING
+            pom.version = "1.1.0.7"
         }
     }
 }

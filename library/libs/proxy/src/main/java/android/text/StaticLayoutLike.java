@@ -136,7 +136,6 @@ public class StaticLayoutLike extends Layout {
          * @param start  The index of the start of the text
          * @param end    The index + 1 of the end of the text
          * @return this builder, useful for chaining
-         * @hide
          */
         public Builder setText(CharSequence source, int start, int end) {
             mText = source;
@@ -150,7 +149,6 @@ public class StaticLayoutLike extends Layout {
          *
          * @param paint The base paint used for layout
          * @return this builder, useful for chaining
-         * @hide
          */
         public Builder setPaint(TextPaint paint) {
             mPaint = paint;
@@ -162,7 +160,6 @@ public class StaticLayoutLike extends Layout {
          *
          * @param width The width in pixels
          * @return this builder, useful for chaining
-         * @hide
          */
         public Builder setWidth(int width) {
             mWidth = width;
@@ -363,7 +360,6 @@ public class StaticLayoutLike extends Layout {
 
         /**
          * Build the {@link StaticLayoutLike} after options have been set.
-         * <p>
          * <p>Note: the builder object must not be reused in any way after calling this
          * method. Setting parameters after calling this method, or calling it a second
          * time on the same builder object, will likely lead to unexpected results.
