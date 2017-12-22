@@ -1,5 +1,11 @@
 buildscript {
     repositories {
+        maven {
+            url "http://172.17.103.59:8081/nexus/content/repositories/releases/"
+        }
+        maven {
+            url "http://172.17.103.59:8081/nexus/content/repositories/snapshots/"
+        }
         jcenter()
     }
     dependencies {
@@ -9,6 +15,12 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {
+            url "http://172.17.103.59:8081/nexus/content/repositories/releases/"
+        }
+        maven {
+            url "http://172.17.103.59:8081/nexus/content/repositories/snapshots/"
+        }
         jcenter()
     }
 }
