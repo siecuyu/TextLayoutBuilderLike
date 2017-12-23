@@ -841,20 +841,37 @@ public class TextLayoutBuilder {
                     numLines,
                     mParams.textDirection);
           } else {
-            layout = StaticLayoutLikeHelper.make(
-                    mParams.text,
-                    0,
-                    mParams.text.length(),
-                    mParams.paint,
-                    width,
-                    mParams.alignment,
-                    mParams.spacingMult,
-                    mParams.spacingAdd,
-                    mParams.includePadding,
-                    mParams.ellipsize,
-                    width,
-                    numLines,
-                    mParams.textDirection);
+            try {
+              layout = StaticLayoutLikeHelper.make(
+                      mParams.text,
+                      0,
+                      mParams.text.length(),
+                      mParams.paint,
+                      width,
+                      mParams.alignment,
+                      mParams.spacingMult,
+                      mParams.spacingAdd,
+                      mParams.includePadding,
+                      mParams.ellipsize,
+                      width,
+                      numLines,
+                      mParams.textDirection);
+            } catch (Throwable e) {
+              layout = StaticLayoutHelper.make(
+                      mParams.text,
+                      0,
+                      mParams.text.length(),
+                      mParams.paint,
+                      width,
+                      mParams.alignment,
+                      mParams.spacingMult,
+                      mParams.spacingAdd,
+                      mParams.includePadding,
+                      mParams.ellipsize,
+                      width,
+                      numLines,
+                      mParams.textDirection);
+            }
           }
         } catch (IndexOutOfBoundsException e) {
           // Workaround for https://code.google.com/p/android/issues/detail?id=35412

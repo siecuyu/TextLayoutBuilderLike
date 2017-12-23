@@ -19,7 +19,7 @@ public class LineBreaksProxy {
 
     public static int[] breaks(Object object) {
         Object ret = ReflectHelp.getFieldValue(object, "breaks");
-        if(ret instanceof Integer[]) {
+        if(ret instanceof int[]) {
             return (int[]) ret;
         } else {
             return new int[16];
@@ -28,7 +28,7 @@ public class LineBreaksProxy {
 
     public static int[] flags(Object object) {
         Object ret = ReflectHelp.getFieldValue(object, "flags");
-        if(ret instanceof Integer[]) {
+        if(ret instanceof int[]) {
             return (int[]) ret;
         } else {
             return new int[16];

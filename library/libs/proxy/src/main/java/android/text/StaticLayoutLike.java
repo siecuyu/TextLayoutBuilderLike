@@ -19,9 +19,11 @@ package android.text;
 import android.annotation.Nullable;
 import android.graphics.Paint;
 import android.text.proxy.AndroidBidiProxy;
+import android.text.proxy.EllipsizerProxy;
 import android.text.proxy.LayoutProxy;
 import android.text.proxy.LineBreaksProxy;
 import android.text.proxy.NativeProxy;
+import android.text.proxy.SpannedEllipsizerProxy;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.LeadingMarginSpan.LeadingMarginSpan2;
 import android.text.style.LineHeightSpan;
@@ -345,16 +347,16 @@ public class StaticLayoutLike extends Layout {
             }
         }
 
-        /* package */ float addStyleRun(TextPaint paint, int start, int end, boolean isRtl) {
+        float addStyleRun(TextPaint paint, int start, int end, boolean isRtl) {
             return nAddStyleRun(mNativePtr, paint.getNativeInstance(), paint.mNativeTypeface,
                     start, end, isRtl);
         }
 
-        /* package */ void addMeasuredRun(int start, int end, float[] widths) {
+         void addMeasuredRun(int start, int end, float[] widths) {
             nAddMeasuredRun(mNativePtr, start, end, widths);
         }
 
-        /* package */ void addReplacementRun(int start, int end, float width) {
+        void addReplacementRun(int start, int end, float width) {
             nAddReplacementRun(mNativePtr, start, end, width);
         }
 
@@ -381,7 +383,7 @@ public class StaticLayoutLike extends Layout {
             }
         }
 
-        /* package */ long mNativePtr;
+        long mNativePtr;
 
         CharSequence mText;
         int mStart;
@@ -467,8 +469,8 @@ public class StaticLayoutLike extends Layout {
         super((ellipsize == null)
                         ? source
                         : (source instanceof Spanned)
-                        ? new SpannedEllipsizer(source)
-                        : new Ellipsizer(source),
+                        ? SpannedEllipsizerProxy.getObjectFromInnerClass(source)
+                        : EllipsizerProxy.getObjectFromInnerClass(source),
                 paint, outerwidth, align, textDir, spacingmult, spacingadd);
 
         Builder b = Builder.obtain(source, bufstart, bufend, paint, outerwidth)
@@ -488,11 +490,14 @@ public class StaticLayoutLike extends Layout {
          * cares about the content instead of just holding the reference.
          */
         if (ellipsize != null) {
-            Ellipsizer e = (Ellipsizer) getText();
-
-            e.mLayout = this;
-            e.mWidth = ellipsizedWidth;
-            e.mMethod = ellipsize;
+//            Ellipsizer e = (Ellipsizer) getText();
+            Object e = getText();
+//            e.mLayout = this;
+//            e.mWidth = b.mEllipsizedWidth;
+//            e.mMethod = b.mEllipsize;
+            EllipsizerProxy.setmLayout(e, this);
+            EllipsizerProxy.setmWidth(e, b.mEllipsizedWidth);
+            EllipsizerProxy.setmMethod(e, b.mEllipsize);
             mEllipsizedWidth = ellipsizedWidth;
 
             mColumns = COLUMNS_ELLIPSIZE;
@@ -522,16 +527,19 @@ public class StaticLayoutLike extends Layout {
         super((b.mEllipsize == null)
                         ? b.mText
                         : (b.mText instanceof Spanned)
-                        ? new SpannedEllipsizer(b.mText)
-                        : new Ellipsizer(b.mText),
+                        ? SpannedEllipsizerProxy.getObjectFromInnerClass(b.mText)
+                        : EllipsizerProxy.getObjectFromInnerClass(b.mText),
                 b.mPaint, b.mWidth, b.mAlignment, b.mSpacingMult, b.mSpacingAdd);
 
         if (b.mEllipsize != null) {
-            Ellipsizer e = (Ellipsizer) getText();
-
-            e.mLayout = this;
-            e.mWidth = b.mEllipsizedWidth;
-            e.mMethod = b.mEllipsize;
+//            Ellipsizer e = (Ellipsizer) getText();
+            Object e = getText();
+//            e.mLayout = this;
+//            e.mWidth = b.mEllipsizedWidth;
+//            e.mMethod = b.mEllipsize;
+            EllipsizerProxy.setmLayout(e, this);
+            EllipsizerProxy.setmWidth(e, b.mEllipsizedWidth);
+            EllipsizerProxy.setmMethod(e, b.mEllipsize);
             mEllipsizedWidth = b.mEllipsizedWidth;
 
             mColumns = COLUMNS_ELLIPSIZE;

@@ -143,16 +143,16 @@ class MeasuredTextLike {
             }
             int bidiRequest;
             if (textDir == TextDirectionHeuristics.LTR) {
-                bidiRequest = Layout.DIR_REQUEST_LTR;
+                bidiRequest = 1;
             } else if (textDir == TextDirectionHeuristics.RTL) {
-                bidiRequest = Layout.DIR_REQUEST_RTL;
+                bidiRequest = -1;
             } else if (textDir == TextDirectionHeuristics.FIRSTSTRONG_LTR) {
-                bidiRequest = Layout.DIR_REQUEST_DEFAULT_LTR;
+                bidiRequest = 2;
             } else if (textDir == TextDirectionHeuristics.FIRSTSTRONG_RTL) {
-                bidiRequest = Layout.DIR_REQUEST_DEFAULT_RTL;
+                bidiRequest = -2;
             } else {
                 boolean isRtl = textDir.isRtl(mChars, 0, len);
-                bidiRequest = isRtl ? Layout.DIR_REQUEST_RTL : Layout.DIR_REQUEST_LTR;
+                bidiRequest = isRtl ? -1 : 1;
             }
             mDir = AndroidBidiProxy.bidi(bidiRequest, mChars, mLevels, len, false);
             mEasy = false;
