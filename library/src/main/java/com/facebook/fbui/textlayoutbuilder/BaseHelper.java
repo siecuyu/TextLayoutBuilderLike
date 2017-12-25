@@ -1,34 +1,24 @@
-/**
- * Copyright (c) 2016-present, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- */
-
 package com.facebook.fbui.textlayoutbuilder;
 
 import android.support.v4.text.TextDirectionHeuristicCompat;
 import android.text.Layout;
-import android.text.StaticLayoutLike;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
-
-import com.facebook.fbui.textlayoutbuilder.proxy.StaticLayoutLikeProxy;
 
 import java.lang.reflect.Field;
 
 /**
- * Helper class to get around the {@link StaticLayoutLike} constructor limitation in ICS.
+ * Created by 80088966 on 2017/12/25.
  */
-/* package */ class StaticLayoutLikeHelper {
+
+public abstract class BaseHelper<T extends Layout> {
 
     // Space and ellipsis to append at the end of a string to ellipsize it
     private static final String SPACE_AND_ELLIPSIS = " \u2026";
 
     /**
-     * Returns a StaticLayoutLike using ICS specific constructor if possible.
+     * Returns a StaticLayout using ICS specific constructor if possible.
      *
      * @param text The text for the layout
      * @param start The start index
@@ -43,9 +33,9 @@ import java.lang.reflect.Field;
      * @param ellipsisWidth The width of the ellipsis
      * @param maxLines The maximum number of lines for this layout
      * @param textDirection The text direction
-     * @return A {@link StaticLayoutLike}
+     * @return A {@link StaticLayout}
      */
-    private static StaticLayoutLike getStaticLayoutLikeMaybeMaxLines(
+    private Layout getStaticLayoutMaybeMaxLines(
             CharSequence text,
             int start,
             int end,
@@ -60,7 +50,7 @@ import java.lang.reflect.Field;
             int maxLines,
             TextDirectionHeuristicCompat textDirection) {
         try {
-            return StaticLayoutLikeProxy.create(
+            return createStaticLayout(
                     text,
                     start,
                     end,
@@ -78,7 +68,7 @@ import java.lang.reflect.Field;
             // Use the publicly available constructor.
         }
 
-        return getStaticLayoutLikeNoMaxLines(
+        return getStaticLayoutNoMaxLines(
                 text,
                 start,
                 end,
@@ -92,8 +82,22 @@ import java.lang.reflect.Field;
                 ellipsisWidth);
     }
 
+    abstract Layout createStaticLayout(CharSequence text,
+                                              int start,
+                                              int end,
+                                              TextPaint paint,
+                                              int width,
+                                              Layout.Alignment alignment,
+                                              float spacingMult,
+                                              float spacingAdd,
+                                              boolean includePadding,
+                                              TextUtils.TruncateAt ellipsize,
+                                              int ellipsisWidth,
+                                              int maxLines,
+                                              TextDirectionHeuristicCompat textDirection);
+
     /**
-     * Returns a StaticLayoutLike with no maxLines restriction.
+     * Returns a StaticLayout with no maxLines restriction.
      *
      * @param text The text for the layout
      * @param start The start index
@@ -106,9 +110,9 @@ import java.lang.reflect.Field;
      * @param includePadding Whether to include font padding
      * @param ellipsize The ellipsizing behavior specified by {@link TextUtils.TruncateAt}
      * @param ellipsisWidth The width of the ellipsis
-     * @return A {@link StaticLayoutLike} with no maxLines restriction
+     * @return A {@link } with no maxLines restriction
      */
-    private static StaticLayoutLike getStaticLayoutLikeNoMaxLines(
+    private Layout getStaticLayoutNoMaxLines(
             CharSequence text,
             int start,
             int end,
@@ -121,8 +125,7 @@ import java.lang.reflect.Field;
             TextUtils.TruncateAt ellipsize,
             int ellipsisWidth) {
 
-        return new StaticLayoutLike(
-                text,
+        return getStaticLayout(text,
                 start,
                 end,
                 paint,
@@ -135,8 +138,20 @@ import java.lang.reflect.Field;
                 ellipsisWidth);
     }
 
+    abstract Layout getStaticLayout(CharSequence text,
+                               int start,
+                               int end,
+                               TextPaint paint,
+                               int width,
+                               Layout.Alignment alignment,
+                               float spacingMult,
+                               float spacingAdd,
+                               boolean includePadding,
+                               TextUtils.TruncateAt ellipsize,
+                               int ellipsisWidth);
+
     /**
-     * Creates a StaticLayoutLike will all the required properties.
+     * Creates a StaticLayout will all the required properties.
      *
      * @param text The text for the layout
      * @param start The start index
@@ -151,9 +166,9 @@ import java.lang.reflect.Field;
      * @param ellipsisWidth The width of the ellipsis
      * @param maxLines The maximum number of lines for this layout
      * @param textDirection The text direction
-     * @return A {@link StaticLayoutLike}
+     * @return A {@link StaticLayout}
      */
-    public static StaticLayoutLike make(
+    public Layout make(
             CharSequence text,
             int start,
             int end,
@@ -168,7 +183,7 @@ import java.lang.reflect.Field;
             int maxLines,
             TextDirectionHeuristicCompat textDirection) {
 
-        StaticLayoutLike layout = getStaticLayoutLikeMaybeMaxLines(
+        Layout layout = getStaticLayoutMaybeMaxLines(
                 text,
                 start,
                 end,
@@ -207,7 +222,7 @@ import java.lang.reflect.Field;
 
                 end = newEnd;
 
-                layout = getStaticLayoutLikeMaybeMaxLines(
+                layout = getStaticLayoutMaybeMaxLines(
                         text,
                         start,
                         end,
@@ -225,7 +240,7 @@ import java.lang.reflect.Field;
                 if (layout.getLineCount() >= maxLines &&
                         layout.getEllipsisCount(maxLines - 1) == 0) {
                     CharSequence ellipsizedText = text.subSequence(start, end) + SPACE_AND_ELLIPSIS;
-                    layout = getStaticLayoutLikeMaybeMaxLines(
+                    layout = getStaticLayoutMaybeMaxLines(
                             ellipsizedText,
                             0,
                             ellipsizedText.length(),
@@ -251,23 +266,23 @@ import java.lang.reflect.Field;
     }
 
     /**
-     * Attempts to fix a StaticLayoutLike with wrong layout information
+     * Attempts to fix a StaticLayout with wrong layout information
      * that can result in StringIndexOutOfBoundsException during layout.draw().
      *
-     * @param layout The {@link StaticLayoutLike} to fix
+     * @param layout The {@link layout} to fix
      * @return Whether the layout was fixed or not
      */
-    public static boolean fixLayout(StaticLayoutLike layout) {
+    public static boolean fixLayout(Layout layout) {
         int lineStart = layout.getLineStart(0);
         for (int i = 0, lineCount = layout.getLineCount(); i < lineCount; ++i) {
             int lineEnd = layout.getLineEnd(i);
             if (lineEnd < lineStart) {
                 // Bug, need to swap lineStart and lineEnd
                 try {
-                    Field mLinesField = StaticLayoutLike.class.getDeclaredField("mLines");
+                    Field mLinesField = layout.getClass().getDeclaredField("mLines");
                     mLinesField.setAccessible(true);
 
-                    Field mColumnsField = StaticLayoutLike.class.getDeclaredField("mColumns");
+                    Field mColumnsField = layout.getClass().getDeclaredField("mColumns");
                     mColumnsField.setAccessible(true);
 
                     int[] mLines = (int[]) mLinesField.get(layout);

@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 dependencies {
 //    compile project(':library:libs:proxy')
-    compile 'com.nearme.instant:staticlayout-proxy:1.1.1.1'
+    compile 'com.nearme.instant.jar:staticlayout-proxy:1.1.1.8'
     provided "com.android.support:support-compat:${rootProject.ext.supportLibVersion}"
     testCompile "junit:junit:${rootProject.ext.junitVersion}"
     testCompile "org.mockito:mockito-core:${rootProject.ext.mockitoCoreVersion}"
@@ -23,4 +23,15 @@ android {
     }
 }
 
-apply from: rootProject.file('release.gradle')
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: /*project.repositories.mavenLocal().url*/"http://172.17.103.59:8081/nexus/content/repositories/releases/") {
+            authentication(userName: "admin", password: "admin123")
+            pom.groupId = POM_GROUPID
+            pom.artifactId = POM_ARTIFACT_ID
+            pom.version = "1.1.1.8"
+        }
+    }
+}

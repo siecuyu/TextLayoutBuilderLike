@@ -30,4 +30,15 @@ jar {
 //    archives javadocJar
 //}
 
-apply from: rootProject.file('release-sonatype.gradle')
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: /*project.repositories.mavenLocal().url*/"http://172.17.103.59:8081/nexus/content/repositories/releases/") {
+            authentication(userName: "admin", password: "admin123")
+            pom.groupId = POM_GROUPID
+            pom.artifactId = POM_ARTIFACT_ID
+            pom.version = "1.1.1.8"
+        }
+    }
+}

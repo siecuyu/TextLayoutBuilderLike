@@ -23,4 +23,34 @@ public class TextUtilsProxy {
 
         return false;
     }
+
+    public static char[] getELLIPSIS_TWO_DOTS() {
+        Class c;
+        try {
+            c = Class.forName(className);
+            Object object = ReflectHelp.getFieldValue(c, "ELLIPSIS_TWO_DOTS");
+            if (object instanceof char[]) {
+                return (char[]) object;
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static char[] getELLIPSIS_NORMAL() {
+        Class c;
+        try {
+            c = Class.forName(className);
+            Object object = ReflectHelp.getFieldValue(c, "ELLIPSIS_NORMAL");
+            if (object instanceof char[]) {
+                return (char[]) object;
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

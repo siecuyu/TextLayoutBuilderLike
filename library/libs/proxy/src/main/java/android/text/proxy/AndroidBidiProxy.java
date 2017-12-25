@@ -20,7 +20,6 @@ public class AndroidBidiProxy {
 
             return (int) ReflectHelp.invokeStatic(c, "bidi", paramType, paramValue);
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return 0;
@@ -35,7 +34,6 @@ public class AndroidBidiProxy {
 
             return (Layout.Directions) ReflectHelp.invokeStatic(c, "directions", paramType, paramValue);
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return null;

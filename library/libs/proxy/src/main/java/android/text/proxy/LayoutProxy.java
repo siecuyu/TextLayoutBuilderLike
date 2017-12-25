@@ -2,6 +2,7 @@ package android.text.proxy;
 
 import android.text.Layout;
 import android.text.Spanned;
+import android.text.TextPaint;
 
 import com.facebook.fbui.textlayoutbuilder.proxy.ReflectHelp;
 
@@ -41,5 +42,15 @@ public class LayoutProxy {
         }
 
         return null;
+    }
+
+//    TextPaint mWorkPaint;
+    public static TextPaint getmWorkPaint(Object object, TextPaint defaultPaint) {
+        Object ret = ReflectHelp.getFieldValue(object, "mWorkPaint");
+        if(ret instanceof TextPaint) {
+            return (TextPaint) ret;
+        } else {
+            return defaultPaint;
+        }
     }
 }

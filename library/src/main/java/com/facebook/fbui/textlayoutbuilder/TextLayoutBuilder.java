@@ -13,7 +13,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
 import android.support.annotation.Px;
@@ -825,54 +824,19 @@ public class TextLayoutBuilder {
     } else {
       while (true) {
         try {
-          if (Build.VERSION.SDK_INT > 25) {
-            layout = StaticLayoutHelper.make(
-                    mParams.text,
-                    0,
-                    mParams.text.length(),
-                    mParams.paint,
-                    width,
-                    mParams.alignment,
-                    mParams.spacingMult,
-                    mParams.spacingAdd,
-                    mParams.includePadding,
-                    mParams.ellipsize,
-                    width,
-                    numLines,
-                    mParams.textDirection);
-          } else {
-            try {
-              layout = StaticLayoutLikeHelper.make(
-                      mParams.text,
-                      0,
-                      mParams.text.length(),
-                      mParams.paint,
-                      width,
-                      mParams.alignment,
-                      mParams.spacingMult,
-                      mParams.spacingAdd,
-                      mParams.includePadding,
-                      mParams.ellipsize,
-                      width,
-                      numLines,
-                      mParams.textDirection);
-            } catch (Throwable e) {
-              layout = StaticLayoutHelper.make(
-                      mParams.text,
-                      0,
-                      mParams.text.length(),
-                      mParams.paint,
-                      width,
-                      mParams.alignment,
-                      mParams.spacingMult,
-                      mParams.spacingAdd,
-                      mParams.includePadding,
-                      mParams.ellipsize,
-                      width,
-                      numLines,
-                      mParams.textDirection);
-            }
-          }
+          layout = StaticLayoutHelper.getInstance().make(mParams.text,
+                  0,
+                  mParams.text.length(),
+                  mParams.paint,
+                  width,
+                  mParams.alignment,
+                  mParams.spacingMult,
+                  mParams.spacingAdd,
+                  mParams.includePadding,
+                  mParams.ellipsize,
+                  width,
+                  numLines,
+                  mParams.textDirection);
         } catch (IndexOutOfBoundsException e) {
           // Workaround for https://code.google.com/p/android/issues/detail?id=35412
           if (!(mParams.text instanceof String)) {

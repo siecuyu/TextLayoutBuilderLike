@@ -114,4 +114,18 @@ public class NativeProxy {
         }
         return 0;
     }
+
+    public static int[] nLineBreakOpportunities(String locale, char[] text, int length, int[] recycle) {
+        Class[] paramType = new Class[]{String.class, char[].class, int.class, int[].class};
+        Object[] paramValue = new Object[]{locale, text, length, recycle};
+
+        Object object = ReflectHelp.invokeStatic(StaticLayout.class, "nLineBreakOpportunities", paramType, paramValue);
+
+        if (object != null && object instanceof int[]) {
+            return (int[]) object;
+        }
+
+        return null;
+    }
+
 }

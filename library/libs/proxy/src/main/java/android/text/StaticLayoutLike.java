@@ -24,6 +24,7 @@ import android.text.proxy.LayoutProxy;
 import android.text.proxy.LineBreaksProxy;
 import android.text.proxy.NativeProxy;
 import android.text.proxy.SpannedEllipsizerProxy;
+import android.text.proxy.TextUtilsProxy;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.LeadingMarginSpan.LeadingMarginSpan2;
 import android.text.style.LineHeightSpan;
@@ -1022,7 +1023,7 @@ public class StaticLayoutLike extends Layout {
 
         float ellipsisWidth = paint.measureText(
                 (where == TextUtils.TruncateAt.END_SMALL) ?
-                        TextUtils.ELLIPSIS_TWO_DOTS : TextUtils.ELLIPSIS_NORMAL, 0, 1);
+                        TextUtilsProxy.getELLIPSIS_TWO_DOTS() : TextUtilsProxy.getELLIPSIS_NORMAL(), 0, 1);
         int ellipsisStart = 0;
         int ellipsisCount = 0;
         int len = lineEnd - lineStart;

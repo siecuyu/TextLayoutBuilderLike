@@ -17,7 +17,10 @@
 package android.text;
 
 import android.graphics.Paint;
+import android.os.Build;
 import android.text.proxy.AndroidBidiProxy;
+import android.text.proxy.ArrayUtilsProxy;
+import android.text.proxy.PaintProxy;
 import android.text.proxy.TextUtilsProxy;
 import android.text.style.MetricAffectingSpan;
 import android.text.style.ReplacementSpan;
@@ -107,11 +110,20 @@ class MeasuredTextLike {
         mPos = 0;
 
         if (mWidths == null || mWidths.length < len) {
-            mWidths = ArrayUtils.newUnpaddedFloatArray(len);
+            if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT <= 20) {
+                mWidths = new float[ArrayUtilsProxy.idealFloatArraySize(len)];
+            } else {
+                mWidths = ArrayUtils.newUnpaddedFloatArray(len);
+            }
         }
         if (mChars == null || mChars.length < len) {
-            mChars = ArrayUtils.newUnpaddedCharArray(len);
+            if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT <= 20) {
+                mChars = new char[ArrayUtilsProxy.idealCharArraySize(len)];
+            } else {
+                mChars = ArrayUtils.newUnpaddedCharArray(len);
+            }
         }
+
         TextUtils.getChars(text, start, end, mChars, 0);
 
         if (text instanceof Spanned) {
@@ -139,7 +151,11 @@ class MeasuredTextLike {
             mEasy = true;
         } else {
             if (mLevels == null || mLevels.length < len) {
-                mLevels = ArrayUtils.newUnpaddedByteArray(len);
+                if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT <= 20) {
+                    mLevels = new byte[ArrayUtilsProxy.idealByteArraySize(len)];
+                } else {
+                    mLevels = ArrayUtils.newUnpaddedByteArray(len);
+                }
             }
             int bidiRequest;
             if (textDir == TextDirectionHeuristics.LTR) {
@@ -211,6 +227,37 @@ class MeasuredTextLike {
         return totalAdvance;
     }
 
+    float addStyleRun4_4(TextPaint paint, int len, Paint.FontMetricsInt fm) {
+        if (fm != null) {
+            paint.getFontMetricsInt(fm);
+        }
+
+        int p = mPos;
+        mPos = p + len;
+
+        if (mEasy) {
+            int flags = mDir == Layout.DIR_LEFT_TO_RIGHT
+                    ? 0 : 1;
+            return PaintProxy.getTextRunAdvances(paint, mChars, p, len, p, len, flags, mWidths, p);
+        }
+
+        float totalAdvance = 0;
+        int level = mLevels[p];
+        for (int q = p, i = p + 1, e = p + len;; ++i) {
+            if (i == e || mLevels[i] != level) {
+                int flags = (level & 0x1) == 0 ? 0 : 1;
+                totalAdvance +=
+                        PaintProxy.getTextRunAdvances(paint, mChars, q, i - q, q, i - q, flags, mWidths, q);
+                if (i == e) {
+                    break;
+                }
+                q = i;
+                level = mLevels[i];
+            }
+        }
+        return totalAdvance;
+    }
+
     float addStyleRun(TextPaint paint, MetricAffectingSpan[] spans, int len,
             Paint.FontMetricsInt fm) {
 
@@ -244,6 +291,51 @@ class MeasuredTextLike {
             } else {
                 mBuilder.addReplacementRun(mPos, mPos + len, wid);
             }
+            mPos += len;
+        }
+
+        if (fm != null) {
+            if (workPaint.baselineShift < 0) {
+                fm.ascent += workPaint.baselineShift;
+                fm.top += workPaint.baselineShift;
+            } else {
+                fm.descent += workPaint.baselineShift;
+                fm.bottom += workPaint.baselineShift;
+            }
+        }
+
+        return wid;
+    }
+
+    float addStyleRun4_4(TextPaint paint, MetricAffectingSpan[] spans, int len,
+                      Paint.FontMetricsInt fm) {
+
+        TextPaint workPaint = mWorkPaint;
+        workPaint.set(paint);
+        // XXX paint should not have a baseline shift, but...
+        workPaint.baselineShift = 0;
+
+        ReplacementSpan replacement = null;
+        for (int i = 0; i < spans.length; i++) {
+            MetricAffectingSpan span = spans[i];
+            if (span instanceof ReplacementSpan) {
+                replacement = (ReplacementSpan)span;
+            } else {
+                span.updateMeasureState(workPaint);
+            }
+        }
+
+        float wid;
+        if (replacement == null) {
+            wid = addStyleRun4_4(workPaint, len, fm);
+        } else {
+            // Use original text.  Shouldn't matter.
+            wid = replacement.getSize(workPaint, mText, mTextStart + mPos,
+                    mTextStart + mPos + len, fm);
+            float[] w = mWidths;
+            w[mPos] = wid;
+            for (int i = mPos + 1, e = mPos + len; i < e; i++)
+                w[i] = 0;
             mPos += len;
         }
 
