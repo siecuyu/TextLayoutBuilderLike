@@ -190,13 +190,12 @@ public class StaticLayout4_4 extends Layout {
                     restWidth -= sp[i].getLeadingMargin(false);
 
                     // LeadingMarginSpan2 is odd.  The count affects all
-                    // leading margin spans, not just this particular one,
-                    // and start from the top of the span, not the top of the
-                    // paragraph.
+                    // leading margin spans, not just this particular one
                     if (lms instanceof LeadingMarginSpan2) {
                         LeadingMarginSpan2 lms2 = (LeadingMarginSpan2) lms;
                         int lmsFirstLine = getLineForOffset(spanned.getSpanStart(lms2));
-                        firstWidthLineLimit = lmsFirstLine + lms2.getLeadingMarginLineCount();
+                        firstWidthLineLimit = Math.max(firstWidthLineLimit,
+                                lmsFirstLine + lms2.getLeadingMarginLineCount());
                     }
                 }
 
@@ -418,7 +417,7 @@ public class StaticLayout4_4 extends Layout {
 
                         if (here < spanStart) {
                             // The text was cut before the beginning of the current span range.
-                            // Exit the span loop, and get spanStart to start over from here.
+                            // Exit the span loop, and getMethod spanStart to start over from here.
                             measured.setPos(here);
                             spanEnd = here;
                             break;
@@ -624,7 +623,11 @@ public class StaticLayout4_4 extends Layout {
             bottom = fm.bottom;
         }
 
-        if (j == 0) {
+        boolean firstLine = (j == 0);
+        boolean currentLineIsTheLastVisibleOne = (j + 1 == mMaximumVisibleLineCount);
+        boolean lastLine = currentLineIsTheLastVisibleOne || (end == bufEnd);
+
+        if (firstLine) {
             if (trackPad) {
                 mTopPadding = top - above;
             }
@@ -633,7 +636,10 @@ public class StaticLayout4_4 extends Layout {
                 above = top;
             }
         }
-        if (end == bufEnd) {
+
+        int extra;
+
+        if (lastLine) {
             if (trackPad) {
                 mBottomPadding = bottom - below;
             }
@@ -643,9 +649,8 @@ public class StaticLayout4_4 extends Layout {
             }
         }
 
-        int extra;
 
-        if (needMultiply) {
+        if (needMultiply && !lastLine) {
             double ex = (below - above) * (spacingmult - 1) + spacingadd;
             if (ex >= 0) {
                 extra = (int)(ex + EXTRA_ROUNDING);
@@ -682,8 +687,6 @@ public class StaticLayout4_4 extends Layout {
         if (ellipsize != null) {
             // If there is only one line, then do any type of ellipsis except when it is MARQUEE
             // if there are multiple lines, just allow END ellipsis on the last line
-            boolean firstLine = (j == 0);
-            boolean currentLineIsTheLastVisibleOne = (j + 1 == mMaximumVisibleLineCount);
             boolean forceEllipsis = moreChars && (mLineCount + 1 == mMaximumVisibleLineCount);
 
             boolean doEllipsis =

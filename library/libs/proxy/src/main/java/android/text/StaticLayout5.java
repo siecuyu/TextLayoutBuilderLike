@@ -438,7 +438,7 @@ public class StaticLayout5 extends Layout {
 
                         if (here < spanStart) {
                             // The text was cut before the beginning of the current span range.
-                            // Exit the span loop, and get spanStart to start over from here.
+                            // Exit the span loop, and getMethod spanStart to start over from here.
                             measured.setPos(here);
                             spanEnd = here;
                             break;

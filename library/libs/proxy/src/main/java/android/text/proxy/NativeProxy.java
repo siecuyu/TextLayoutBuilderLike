@@ -4,14 +4,24 @@ import android.text.StaticLayout;
 
 import com.facebook.fbui.textlayoutbuilder.proxy.ReflectHelp;
 
+import java.lang.reflect.Method;
+
 /**
  * Created by 80088966 on 2017/12/21.
  */
 
 public class NativeProxy {
+    private static String className = "android.text.StaticLayout";
+
     public static long nNewBuilder() {
         try {
-            return (long) ReflectHelp.invokeStatic(StaticLayout.class, "nNewBuilder", null, null);
+            String key = className + "." + "nNewBuilder";
+            Method method = StaticMethodMap.getMethod(key);
+            if (null == method) {
+                method = ReflectHelp.getMethod(StaticLayout.class, "nNewBuilder", null);
+                StaticMethodMap.putMethod(key, method);
+            }
+            return (long) ReflectHelp.invokeStatic(method, null);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -20,29 +30,57 @@ public class NativeProxy {
     }
 
     public static void nFreeBuilder(long nativePtr) {
-        Class[] paramType = new Class[]{long.class};
+        String key = className + "." + "nFreeBuilder";
+        Method method = StaticMethodMap.getMethod(key);
+        if (null == method) {
+            Class[] paramType = new Class[]{long.class};
+            method = ReflectHelp.getMethod(StaticLayout.class, "nFreeBuilder", paramType);
+            StaticMethodMap.putMethod(key, method);
+        }
+
         Object[] paramValue = new Object[]{nativePtr};
-        ReflectHelp.invokeStatic(StaticLayout.class, "nFreeBuilder", paramType, paramValue);
+        ReflectHelp.invokeStatic(method, paramValue);
     }
 
     public static void nFinishBuilder(long nativePtr) {
-        Class[] paramType = new Class[]{long.class};
+        String key = className + "." + "nFinishBuilder";
+        Method method = StaticMethodMap.getMethod(key);
+        if (null == method) {
+            Class[] paramType = new Class[]{long.class};
+            method = ReflectHelp.getMethod(StaticLayout.class, "nFinishBuilder", paramType);
+            StaticMethodMap.putMethod(key, method);
+        }
+
         Object[] paramValue = new Object[]{nativePtr};
-        ReflectHelp.invokeStatic(StaticLayout.class, "nFinishBuilder", paramType, paramValue);
+        ReflectHelp.invokeStatic(method, paramValue);
     }
 
 //    /* package */ static native long nLoadHyphenator(ByteBuffer buf, int offset);
 
     public static void nSetLocale(long nativePtr, String locale, long nativeHyphenator) {
-        Class[] paramType = new Class[]{long.class, String.class, long.class};
+        String key = className + "." + "nSetLocale";
+        Method method = StaticMethodMap.getMethod(key);
+        if (null == method) {
+            Class[] paramType = new Class[]{long.class, String.class, long.class};
+            method = ReflectHelp.getMethod(StaticLayout.class, "nSetLocale", paramType);
+            StaticMethodMap.putMethod(key, method);
+        }
+
         Object[] paramValue = new Object[]{nativePtr, locale, nativeHyphenator};
-        ReflectHelp.invokeStatic(StaticLayout.class, "nSetLocale", paramType, paramValue);
+        ReflectHelp.invokeStatic(method, paramValue);
     }
 
     public static void nSetIndents(long nativePtr, int[] indents) {
-        Class[] paramType = new Class[]{long.class, int[].class};
+        String key = className + "." + "nSetIndents";
+        Method method = StaticMethodMap.getMethod(key);
+        if (null == method) {
+            Class[] paramType = new Class[]{long.class, int[].class};
+            method = ReflectHelp.getMethod(StaticLayout.class, "nSetIndents", paramType);
+            StaticMethodMap.putMethod(key, method);
+        }
+
         Object[] paramValue = new Object[]{nativePtr, indents};
-        ReflectHelp.invokeStatic(StaticLayout.class, "nSetIndents", paramType, paramValue);
+        ReflectHelp.invokeStatic(method, paramValue);
     }
 
     // Set up paragraph text and settings; done as one big method to minimize jni crossings
@@ -50,20 +88,34 @@ public class NativeProxy {
                                        float firstWidth, int firstWidthLineCount, float restWidth,
                                        int[] variableTabStops, int defaultTabStop, int breakStrategy,
                                        int hyphenationFrequency) {
-        Class[] paramType = new Class[]{long.class, char[].class, int.class, float.class,
-                int.class, float.class, int[].class, int.class, int.class, int.class};
+        String key = className + "." + "nSetupParagraph";
+        Method method = StaticMethodMap.getMethod(key);
+        if (null == method) {
+            Class[] paramType = new Class[]{long.class, char[].class, int.class, float.class,
+                    int.class, float.class, int[].class, int.class, int.class, int.class};
+            method = ReflectHelp.getMethod(StaticLayout.class, "nSetupParagraph", paramType);
+            StaticMethodMap.putMethod(key, method);
+        }
+
         Object[] paramValue = new Object[]{nativePtr, text, length, firstWidth, firstWidthLineCount,
                 restWidth, variableTabStops, defaultTabStop, breakStrategy, hyphenationFrequency};
-        ReflectHelp.invokeStatic(StaticLayout.class, "nSetupParagraph", paramType, paramValue);
+        ReflectHelp.invokeStatic(method, paramValue);
     }
 
     public static float nAddStyleRun(long nativePtr, long nativePaint,
                                      long nativeTypeface, int start, int end, boolean isRtl) {
         try {
-            Class[] paramType = new Class[]{long.class, long.class, long.class, int.class,
-                    int.class, boolean.class};
+            String key = className + "." + "nAddStyleRun";
+            Method method = StaticMethodMap.getMethod(key);
+            if (null == method) {
+                Class[] paramType = new Class[]{long.class, long.class, long.class, int.class,
+                        int.class, boolean.class};
+                method = ReflectHelp.getMethod(StaticLayout.class, "nAddStyleRun", paramType);
+                StaticMethodMap.putMethod(key, method);
+            }
+
             Object[] paramValue = new Object[]{nativePtr, nativePaint, nativeTypeface, start, end, isRtl};
-            return (float) ReflectHelp.invokeStatic(StaticLayout.class, "nAddStyleRun", paramType, paramValue);
+            return (float) ReflectHelp.invokeStatic(method, paramValue);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -73,25 +125,43 @@ public class NativeProxy {
 
     public static void nAddMeasuredRun(long nativePtr,
                                        int start, int end, float[] widths) {
-        Class[] paramType = new Class[]{long.class, int.class, int.class, float[].class};
+        String key = className + "." + "nAddMeasuredRun";
+        Method method = StaticMethodMap.getMethod(key);
+        if (null == method) {
+            Class[] paramType = new Class[]{long.class, int.class, int.class, float[].class};
+            method = ReflectHelp.getMethod(StaticLayout.class, "nAddMeasuredRun", paramType);
+            StaticMethodMap.putMethod(key, method);
+        }
         Object[] paramValue = new Object[]{nativePtr, start, end, widths};
 
-        ReflectHelp.invokeStatic(StaticLayout.class, "nAddMeasuredRun", paramType, paramValue);
+        ReflectHelp.invokeStatic(method, paramValue);
 
     }
 
     public static void nAddReplacementRun(long nativePtr, int start, int end, float width) {
-        Class[] paramType = new Class[]{long.class, int.class, int.class, float.class};
+        String key = className + "." + "nAddReplacementRun";
+        Method method = StaticMethodMap.getMethod(key);
+        if (null == method) {
+            Class[] paramType = new Class[]{long.class, int.class, int.class, float.class};
+            method = ReflectHelp.getMethod(StaticLayout.class, "nAddReplacementRun", paramType);
+            StaticMethodMap.putMethod(key, method);
+        }
         Object[] paramValue = new Object[]{nativePtr, start, end, width};
 
-        ReflectHelp.invokeStatic(StaticLayout.class, "nAddReplacementRun", paramType, paramValue);
+        ReflectHelp.invokeStatic(method, paramValue);
     }
 
     public static void nGetWidths(long nativePtr, float[] widths) {
-        Class[] paramType = new Class[]{long.class, float[].class};
+        String key = className + "." + "nGetWidths";
+        Method method = StaticMethodMap.getMethod(key);
+        if (null == method) {
+            Class[] paramType = new Class[]{long.class, float[].class};
+            method = ReflectHelp.getMethod(StaticLayout.class, "nGetWidths", paramType);
+            StaticMethodMap.putMethod(key, method);
+        }
         Object[] paramValue = new Object[]{nativePtr, widths};
 
-        ReflectHelp.invokeStatic(StaticLayout.class, "nGetWidths", paramType, paramValue);
+        ReflectHelp.invokeStatic(method, paramValue);
     }
 
     // populates LineBreaks and returns the number of breaks found
@@ -102,24 +172,39 @@ public class NativeProxy {
     public static int nComputeLineBreaks(long nativePtr, Object recycle,
                                          int[] recycleBreaks, float[] recycleWidths, int[] recycleFlags,
                                          int recycleLength) {
-        Class[] paramType = new Class[]{long.class, LineBreaksProxy.getLineBreaksClass(), int[].class,
-                float[].class, int[].class, int.class};
+        String key = className + "." + "nComputeLineBreaks";
+        Method method = StaticMethodMap.getMethod(key);
+        if (null == method) {
+            Class[] paramType = new Class[]{long.class, LineBreaksProxy.getLineBreaksClass(), int[].class,
+                    float[].class, int[].class, int.class};
+            method = ReflectHelp.getMethod(StaticLayout.class, "nComputeLineBreaks", paramType);
+            StaticMethodMap.putMethod(key, method);
+        }
+
         Object[] paramValue = new Object[]{nativePtr, recycle, recycleBreaks, recycleWidths,
                 recycleFlags, recycleLength};
 
-        Object object = ReflectHelp.invokeStatic(StaticLayout.class, "nComputeLineBreaks", paramType, paramValue);
+        Object object = ReflectHelp.invokeStatic(method, paramValue);
 
         if (object != null && object instanceof Integer) {
             return (int) object;
         }
+
         return 0;
     }
 
     public static int[] nLineBreakOpportunities(String locale, char[] text, int length, int[] recycle) {
-        Class[] paramType = new Class[]{String.class, char[].class, int.class, int[].class};
+        String key = className + "." + "nLineBreakOpportunities";
+        Method method = StaticMethodMap.getMethod(key);
+        if (null == method) {
+            Class[] paramType = new Class[]{String.class, char[].class, int.class, int[].class};
+            method = ReflectHelp.getMethod(StaticLayout.class, "nLineBreakOpportunities", paramType);
+            StaticMethodMap.putMethod(key, method);
+        }
+
         Object[] paramValue = new Object[]{locale, text, length, recycle};
 
-        Object object = ReflectHelp.invokeStatic(StaticLayout.class, "nLineBreakOpportunities", paramType, paramValue);
+        Object object = ReflectHelp.invokeStatic(method, paramValue);
 
         if (object != null && object instanceof int[]) {
             return (int[]) object;

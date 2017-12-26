@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
  * Created by 80088966 on 2017/12/25.
  */
 
-public abstract class BaseHelper<T extends Layout> {
+public abstract class BaseHelper {
 
     // Space and ellipsis to append at the end of a string to ellipsize it
     private static final String SPACE_AND_ELLIPSIS = " \u2026";

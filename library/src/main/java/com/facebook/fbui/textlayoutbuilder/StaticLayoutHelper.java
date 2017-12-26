@@ -19,6 +19,7 @@ import android.text.StaticLayoutLike;
 import android.text.TextPaint;
 import android.text.TextUtils;
 
+import com.facebook.fbui.textlayoutbuilder.proxy.StaticLayout4_4Proxy;
 import com.facebook.fbui.textlayoutbuilder.proxy.StaticLayout5Proxy;
 import com.facebook.fbui.textlayoutbuilder.proxy.StaticLayoutLikeProxy;
 import com.facebook.fbui.textlayoutbuilder.proxy.StaticLayoutProxy;
@@ -26,7 +27,9 @@ import com.facebook.fbui.textlayoutbuilder.proxy.StaticLayoutProxy;
 /**
  * Helper class to get around the {@link Layout} constructor limitation in ICS.
  */
-class StaticLayoutHelper extends BaseHelper<Layout> {
+public class StaticLayoutHelper extends BaseHelper {
+
+    public static boolean USER_SRC = false;
 
     private StaticLayoutHelper() {
 
@@ -57,7 +60,23 @@ class StaticLayoutHelper extends BaseHelper<Layout> {
                               int maxLines,
                               TextDirectionHeuristicCompat textDirection) {
         try {
-            if (Build.VERSION.SDK_INT >= 26 || Build.VERSION.SDK_INT < 21) { // 8.0 和4.4以下使用原生代码
+            if(Build.VERSION.SDK_INT == 19 || Build.VERSION.SDK_INT == 20) {
+                return StaticLayout4_4Proxy.create(text,
+                        start,
+                        end,
+                        paint,
+                        width,
+                        alignment,
+                        spacingMult,
+                        spacingAdd,
+                        includePadding,
+                        ellipsize,
+                        ellipsisWidth,
+                        maxLines,
+                        textDirection);
+            }
+
+            if (USER_SRC || Build.VERSION.SDK_INT >= 26 || Build.VERSION.SDK_INT <= 18) { // 8.0 和4.3以下使用原生代码
                 return StaticLayoutProxy.create(text,
                         start,
                         end,
@@ -131,7 +150,22 @@ class StaticLayoutHelper extends BaseHelper<Layout> {
                            TextUtils.TruncateAt ellipsize,
                            int ellipsisWidth) {
         try {
-            if (Build.VERSION.SDK_INT >= 26 || Build.VERSION.SDK_INT < 19) { // 8.0
+            if(Build.VERSION.SDK_INT == 19 || Build.VERSION.SDK_INT == 20) {// android 4.4
+                return new StaticLayout4_4(
+                        text,
+                        start,
+                        end,
+                        paint,
+                        width,
+                        alignment,
+                        spacingMult,
+                        spacingAdd,
+                        includePadding,
+                        ellipsize,
+                        ellipsisWidth);
+            }
+
+            if (USER_SRC || Build.VERSION.SDK_INT >= 26 || Build.VERSION.SDK_INT <= 18) { // android 8.0 和 android 4.3以下
                 return new StaticLayout(
                         text,
                         start,
@@ -144,7 +178,7 @@ class StaticLayoutHelper extends BaseHelper<Layout> {
                         includePadding,
                         ellipsize,
                         ellipsisWidth);
-            } else if (Build.VERSION.SDK_INT >= 23) { // 6.0
+            } else if (Build.VERSION.SDK_INT >= 23) { // android 6.0
                 return new StaticLayoutLike(
                         text,
                         start,
@@ -157,21 +191,8 @@ class StaticLayoutHelper extends BaseHelper<Layout> {
                         includePadding,
                         ellipsize,
                         ellipsisWidth);
-            } else if (Build.VERSION.SDK_INT >= 21) { // 5.0
+            } else { //android 5.0
                 return new StaticLayout5(
-                        text,
-                        start,
-                        end,
-                        paint,
-                        width,
-                        alignment,
-                        spacingMult,
-                        spacingAdd,
-                        includePadding,
-                        ellipsize,
-                        ellipsisWidth);
-            } else { // 4.4
-                return new StaticLayout4_4(
                         text,
                         start,
                         end,

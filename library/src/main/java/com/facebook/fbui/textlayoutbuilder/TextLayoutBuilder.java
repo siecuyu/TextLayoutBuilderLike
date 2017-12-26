@@ -824,6 +824,7 @@ public class TextLayoutBuilder {
     } else {
       while (true) {
         try {
+          long start = System.currentTimeMillis();
           layout = StaticLayoutHelper.getInstance().make(mParams.text,
                   0,
                   mParams.text.length(),
@@ -837,6 +838,7 @@ public class TextLayoutBuilder {
                   width,
                   numLines,
                   mParams.textDirection);
+          Log.e("TextLayoutBuilder", "time = " + (System.currentTimeMillis() - start));
         } catch (IndexOutOfBoundsException e) {
           // Workaround for https://code.google.com/p/android/issues/detail?id=35412
           if (!(mParams.text instanceof String)) {

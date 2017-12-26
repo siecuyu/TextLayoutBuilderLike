@@ -2,7 +2,6 @@ package com.facebook.fbui.textlayoutbuilder.proxy;
 
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -59,6 +58,17 @@ public class ReflectHelp {
 		return fildValue;
 	}
 
+	public static Object getFieldValue(Object object, Field fild) {
+		Object fildValue = null;
+		try {
+			fild.setAccessible(true);
+			fildValue = fild.get(object);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return fildValue;
+	}
+
 	
 	public static Object invoke( Object obj, String methodName, Class[] paramType, Object[] paramValue) {
 		if (obj == null || TextUtils.isEmpty(methodName)) {
@@ -67,15 +77,6 @@ public class ReflectHelp {
 		Class c = obj.getClass();
 		try {
 			Method m = getMethod(c, methodName, paramType);
-
-			StringBuilder stringBuilder = new StringBuilder();
-			if (paramValue != null) {
-				for (int i = 0; i < paramValue.length; i++) {
-					stringBuilder.append(paramValue[i]).append(",");
-				}
-			}
-			Log.i("test", "invoke paramValue = " + stringBuilder.toString());
-
 			if (m != null) {
 				m.setAccessible(true);
 				return m.invoke(obj, paramValue);
@@ -91,7 +92,30 @@ public class ReflectHelp {
 		}
 
 		return null;
+	}
 
+	public static Object invoke( Object obj, Method method, Object[] paramValue) {
+		if (obj == null) {
+			return null;
+		}
+		try {
+			if (method != null) {
+				method.setAccessible(true);
+				return method.invoke(obj, paramValue);
+			}
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
     public static Object invokeThrowException(Object obj, String methodName, Class[] paramType, Object[] paramValue)
@@ -108,7 +132,6 @@ public class ReflectHelp {
 				stringBuilder.append(paramValue[i]).append(",");
 			}
 		}
-		Log.i("test", "invokeThrowException paramValue = " + stringBuilder.toString());
 
         if (m != null) {
             m.setAccessible(true);
@@ -123,16 +146,6 @@ public class ReflectHelp {
 			return null;
 		}
 		Method m = null;
-
-		StringBuilder stringBuilder = new StringBuilder();
-		if (paramClass != null) {
-			for (int i = 0; i < paramClass.length; i++) {
-				stringBuilder.append(paramClass[i]).append(",");
-			}
-		}
-		Log.i("test", "getMethod Class = " + c + ", methodName = " + methodName
-				+ ", paramType = " + stringBuilder.toString());
-
 		try {
 			m = c.getDeclaredMethod(methodName, paramClass);
 		} catch (Exception e) {
@@ -142,16 +155,28 @@ public class ReflectHelp {
 				if (c.getSuperclass() != null) {
 					m = getMethod(c.getSuperclass(), methodName, paramClass);
 				} else {
-					Log.i("test", "getMethod Method1 = " + m);
 					return m;
 				}
 			}
 		}
 
-		Log.i("test", "getMethod Method2 = " + m);
 		return m;
 	}
 
+	public static void setFieldValue(Object obj, Field field, Object value) {
+		if (obj == null)
+			return;
+		if (field != null) {
+			field.setAccessible(true);
+			try {
+				field.set(obj, value);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	public static void setFieldValue(Class c, Object obj, String fieldName, Object value) {
 		if ((obj == null && c == null) || TextUtils.isEmpty(fieldName))
@@ -197,6 +222,24 @@ public class ReflectHelp {
 		}
 
 		Field field = getField(c, fieldName);
+		if (field != null) {
+			field.setAccessible(true);
+			try {
+				return field.get(c);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	public static Object getFieldValue(Class c, Field field) {
+		if (c == null) {
+			return null;
+		}
+
 		if (field != null) {
 			field.setAccessible(true);
 			try {
@@ -335,7 +378,6 @@ public class ReflectHelp {
 					stringBuilder.append(paramValue[i]).append(",");
 				}
 			}
-			Log.i("test", "invokeStatic paramValue = " + stringBuilder.toString());
 
 			if (m != null) {
 				m.setAccessible(true);
@@ -353,6 +395,25 @@ public class ReflectHelp {
 
 		return null;
 
+	}
+
+	public static Object invokeStatic(Method method, Object[] paramValue) {
+		try {
+			if (method != null) {
+				method.setAccessible(true);
+				return method.invoke(null, paramValue);
+			}
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	public static Constructor getConstructorForStaticInnerClass(String innerClassName, Class[] parameterTypes) {
@@ -376,6 +437,19 @@ public class ReflectHelp {
 		Object result = null;
 		try {
 			Constructor con = getConstructorForStaticInnerClass(innerClassName, parameterTypes);
+			if (con != null) {
+				con.setAccessible(true);
+				result = con.newInstance(paramsArgs);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static Object getObjectFromStaticInnerClass(Constructor con, Object[] paramsArgs) {
+		Object result = null;
+		try {
 			if (con != null) {
 				con.setAccessible(true);
 				result = con.newInstance(paramsArgs);

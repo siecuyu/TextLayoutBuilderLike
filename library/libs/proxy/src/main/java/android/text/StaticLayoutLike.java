@@ -59,7 +59,7 @@ public class StaticLayoutLike extends Layout {
      * particularly to access newer features. To build a static layout, first
      * call {@link #obtain} with the required arguments (text, paint, and width),
      * then call setters for optional parameters, and finally {@link #build}
-     * to build the StaticLayoutLike object. Parameters not explicitly set will get
+     * to build the StaticLayoutLike object. Parameters not explicitly set will getMethod
      * default values.
      */
     public final static class Builder {
