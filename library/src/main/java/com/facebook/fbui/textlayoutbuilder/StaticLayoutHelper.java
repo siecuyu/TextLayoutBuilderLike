@@ -9,6 +9,7 @@
 
 package com.facebook.fbui.textlayoutbuilder;
 
+import android.graphics.Paint;
 import android.os.Build;
 import android.support.v4.text.TextDirectionHeuristicCompat;
 import android.text.Layout;
@@ -32,7 +33,11 @@ public class StaticLayoutHelper extends BaseHelper {
     public static boolean USER_SRC = false;
 
     private StaticLayoutHelper() {
-
+        if (getStaticLayout().getHeight() == 17) {
+            USER_SRC = true;
+        } else {
+            USER_SRC = false;
+        }
     }
 
     private static StaticLayoutHelper helper;
@@ -243,5 +248,22 @@ public class StaticLayoutHelper extends BaseHelper {
                     ellipsize,
                     ellipsisWidth);
         }
+    }
+
+    private StaticLayout getStaticLayout() {
+        TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        return new StaticLayout(
+                "height",
+                0,
+                2,
+                paint,
+                64,
+                StaticLayout.Alignment.ALIGN_NORMAL,
+                1.0f,
+                68.8f,
+                true,
+                null,
+                64
+        );
     }
 }
