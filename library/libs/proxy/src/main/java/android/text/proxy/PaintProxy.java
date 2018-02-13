@@ -15,13 +15,13 @@ public class PaintProxy {
                                            int contextIndex, int contextCount, int flags, float[] advances,
                                            int advancesIndex) {
         try {
-            String key = className + "." + "directions";
+            String key = className + "." + "getTextRunAdvances";
             Method method = StaticMethodMap.getMethod(key);
             if (null == method) {
                 Class c = Class.forName(className);
                 Class[] paramType = new Class[]{char[].class, int.class, int.class, int.class, int.class, int.class,
                         float[].class, int.class};
-                method = ReflectHelp.getMethod(c, "directions", paramType);
+                method = ReflectHelp.getMethod(c, "getTextRunAdvances", paramType);
                 StaticMethodMap.putMethod(key, method);
             }
             Object[] paramValue = new Object[]{chars, index, count, contextIndex, contextCount, flags, advances,
