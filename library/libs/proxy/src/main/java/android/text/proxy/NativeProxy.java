@@ -23,7 +23,6 @@ public class NativeProxy {
             }
             return (long) ReflectHelp.invokeStatic(method, null);
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return 0;
@@ -117,7 +116,6 @@ public class NativeProxy {
             Object[] paramValue = new Object[]{nativePtr, nativePaint, nativeTypeface, start, end, isRtl};
             return (float) ReflectHelp.invokeStatic(method, paramValue);
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return 0;

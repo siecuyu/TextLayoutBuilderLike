@@ -30,7 +30,6 @@ public class LayoutProxy {
             Object[] paramValue = new Object[]{spanned, i, i1, aClass};
             return (T[]) ReflectHelp.invokeStatic(method, paramValue);
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -52,7 +51,6 @@ public class LayoutProxy {
                 return (Layout.Directions) object;
             }
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -74,7 +72,6 @@ public class LayoutProxy {
                 return (TextPaint) ret;
             }
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return defaultPaint;

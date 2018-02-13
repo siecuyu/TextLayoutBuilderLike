@@ -27,7 +27,6 @@ public class LineBreaksProxy {
 
             return ReflectHelp.getObjectFromStaticInnerClass(con, null);
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -48,7 +47,6 @@ public class LineBreaksProxy {
                 return (int[]) ret;
             }
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return new int[16];
@@ -69,7 +67,6 @@ public class LineBreaksProxy {
                 return (int[]) ret;
             }
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return new int[16];
@@ -90,7 +87,6 @@ public class LineBreaksProxy {
                 return (float[]) ret;
             }
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return new float[16];

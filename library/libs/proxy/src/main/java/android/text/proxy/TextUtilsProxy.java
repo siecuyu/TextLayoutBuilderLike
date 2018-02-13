@@ -26,7 +26,6 @@ public class TextUtilsProxy {
 
             return (boolean) ReflectHelp.invokeStatic(method, paramValue);
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return false;
@@ -47,7 +46,6 @@ public class TextUtilsProxy {
                 return (char[]) object;
             }
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -67,7 +65,6 @@ public class TextUtilsProxy {
                 return (char[]) object;
             }
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return null;

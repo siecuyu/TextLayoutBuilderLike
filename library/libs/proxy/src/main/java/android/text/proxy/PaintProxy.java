@@ -28,7 +28,6 @@ public class PaintProxy {
                     advancesIndex};
             return (float) ReflectHelp.invoke(object, method, paramValue);
         } catch (Throwable e) {
-            e.printStackTrace();
         }
 
         return 0;

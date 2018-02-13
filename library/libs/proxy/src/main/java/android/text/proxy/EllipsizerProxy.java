@@ -29,7 +29,6 @@ public class EllipsizerProxy {
             return (CharSequence) ReflectHelp.getObjectFromStaticInnerClass(con, paramValue);
 
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
         return null;
@@ -47,7 +46,6 @@ public class EllipsizerProxy {
 
             ReflectHelp.setFieldValue(object, field, layout);
         } catch (Throwable e) {
-            e.printStackTrace();
         }
     }
 
@@ -63,7 +61,6 @@ public class EllipsizerProxy {
 
             ReflectHelp.setFieldValue(object, field, ellipsizedWidth);
         } catch (Throwable e) {
-            e.printStackTrace();
         }
     }
 
@@ -79,7 +76,6 @@ public class EllipsizerProxy {
 
             ReflectHelp.setFieldValue(object, field, truncateAt);
         } catch (Throwable e) {
-            e.printStackTrace();
         }
     }
 

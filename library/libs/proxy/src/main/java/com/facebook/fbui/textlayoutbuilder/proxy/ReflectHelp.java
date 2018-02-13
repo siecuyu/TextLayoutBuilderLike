@@ -19,9 +19,7 @@ public class ReflectHelp {
 			constructor.setAccessible(true);
 			returnObj = constructor.newInstance(intArgs);
 		} catch (NoSuchMethodException ex) {
-			ex.printStackTrace();
 		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 		return returnObj;
 	}
@@ -34,9 +32,7 @@ public class ReflectHelp {
 			fild.setAccessible(true);
 			fild.set(object, filedValue);
 		} catch (NoSuchFieldException ex) {
-			ex.printStackTrace();
 		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 
@@ -51,9 +47,7 @@ public class ReflectHelp {
 			fildValue = fild.get(object);
 
 		} catch (NoSuchFieldException ex) {
-			ex.printStackTrace();
 		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 		return fildValue;
 	}
@@ -64,7 +58,6 @@ public class ReflectHelp {
 			fild.setAccessible(true);
 			fildValue = fild.get(object);
 		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 		return fildValue;
 	}
@@ -82,13 +75,9 @@ public class ReflectHelp {
 				return m.invoke(obj, paramValue);
 			}
 		} catch (SecurityException e) {
-			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
 		}
 
 		return null;
@@ -104,15 +93,10 @@ public class ReflectHelp {
 				return method.invoke(obj, paramValue);
 			}
 		} catch (SecurityException e) {
-			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
 		} catch (Throwable e) {
-			e.printStackTrace();
 		}
 
 		return null;
@@ -171,9 +155,7 @@ public class ReflectHelp {
 			try {
 				field.set(obj, value);
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -189,9 +171,7 @@ public class ReflectHelp {
 			try {
 				field.set(obj, value);
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -208,9 +188,7 @@ public class ReflectHelp {
 			try {
 				return field.get(obj);
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
 			}
 		}
 		return null;
@@ -227,9 +205,7 @@ public class ReflectHelp {
 			try {
 				return field.get(c);
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
 			}
 		}
 		return null;
@@ -245,9 +221,7 @@ public class ReflectHelp {
 			try {
 				return field.get(c);
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
 			}
 		}
 		return null;
@@ -269,9 +243,7 @@ public class ReflectHelp {
 				} else {
 					return field;
 				}
-				e1.printStackTrace();
 			}
-			e.printStackTrace();
 		}
 
 		return field;
@@ -286,9 +258,7 @@ public class ReflectHelp {
 				constructor = c.getDeclaredConstructor(parameterTypes);
 			}
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
 		}
 		return constructor;
 	}
@@ -316,9 +286,7 @@ public class ReflectHelp {
 				}
 
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
 			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
 			}
 		}
 		return constructor;
@@ -349,7 +317,6 @@ public class ReflectHelp {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return result;
 	}
@@ -359,7 +326,6 @@ public class ReflectHelp {
 		try {
 			c = Class.forName(className);
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}
 		return c;
 	}
@@ -384,13 +350,9 @@ public class ReflectHelp {
 				return m.invoke(null, paramValue);
 			}
 		} catch (SecurityException e) {
-			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
 		}
 
 		return null;
@@ -404,13 +366,9 @@ public class ReflectHelp {
 				return method.invoke(null, paramValue);
 			}
 		} catch (SecurityException e) {
-			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
 		}
 
 		return null;
@@ -425,9 +383,7 @@ public class ReflectHelp {
 				constructor = innerClass.getDeclaredConstructor(parameterTypes);
 			}
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
 		}
 		return constructor;
 	}
@@ -442,7 +398,6 @@ public class ReflectHelp {
 				result = con.newInstance(paramsArgs);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return result;
 	}
@@ -455,7 +410,6 @@ public class ReflectHelp {
 				result = con.newInstance(paramsArgs);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return result;
 	}

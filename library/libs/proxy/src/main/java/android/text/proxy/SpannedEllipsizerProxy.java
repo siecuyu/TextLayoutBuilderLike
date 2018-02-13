@@ -26,7 +26,6 @@ public class SpannedEllipsizerProxy {
             return (CharSequence) ReflectHelp.getObjectFromStaticInnerClass(con, paramValue);
 
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
         return null;
